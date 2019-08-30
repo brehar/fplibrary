@@ -1,9 +1,46 @@
-name := "monads"
+ThisBuild / name := "monads"
 
-version := "0.0.1"
+ThisBuild / version := "0.0.1"
 
-scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.8"
 
-resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+ThisBuild / scalacOptions ++= Seq(
+  "-encoding", "utf8",
+  "-Xfatal-warnings",
+  "-deprecation",
+  "-unchecked",
+  "-feature",
+  "-language:postfixOps",
+  "-language:implicitConversions",
+  "-language:higherKinds"
+)
 
-scalafmtOnCompile := true
+ThisBuild / resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+
+ThisBuild / triggeredMessage := Watched.clearWhenTriggered
+
+ThisBuild / autoStartServer := false
+
+ThisBuild / scalafmtOnCompile := true
+
+ThisBuild / shellPrompt := (_ => fancyPrompt(name.value))
+
+def fancyPrompt(projectName: String): String =
+  s"""|
+      |[info] Welcome to the ${cyan(projectName)} project!
+      |sbt> """.stripMargin
+
+def cyan(projectName: String): String = scala.Console.CYAN + projectName + scala.Console.RESET
+
+lazy val fplibrary =
+  project.in(file("./fplibrary")).settings(shellPrompt := (_ => fancyPrompt(name.value)))
+
+lazy val application = project
+  .in(file("./application"))
+  .settings(shellPrompt := (_ => fancyPrompt(name.value)))
+  .dependsOn(fplibrary)
+
+lazy val main = project
+  .in(file("./main"))
+  .settings(shellPrompt := (_ => fancyPrompt(name.value)))
+  .dependsOn(application)
