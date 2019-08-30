@@ -15,8 +15,6 @@ ThisBuild / scalacOptions ++= Seq(
   "-language:higherKinds"
 )
 
-ThisBuild / resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
-
 ThisBuild / triggeredMessage := Watched.clearWhenTriggered
 
 ThisBuild / autoStartServer := false
@@ -44,3 +42,13 @@ lazy val main = project
   .in(file("./main"))
   .settings(shellPrompt := (_ => fancyPrompt(name.value)))
   .dependsOn(application)
+
+addCommandAlias("cd", "project")
+
+addCommandAlias("root", "project monads")
+
+addCommandAlias("lib", "project fplibrary")
+
+addCommandAlias("app", "project application")
+
+addCommandAlias("main", "project main")
