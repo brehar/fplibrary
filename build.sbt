@@ -30,6 +30,8 @@ def fancyPrompt(projectName: String): String =
 
 def cyan(projectName: String): String = scala.Console.CYAN + projectName + scala.Console.RESET
 
+ThisBuild / libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
+
 lazy val fplibrary =
   project.in(file("./fplibrary")).settings(shellPrompt := (_ => fancyPrompt(name.value)))
 

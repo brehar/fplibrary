@@ -4,7 +4,7 @@ object Interpreter {
   def main(args: Array[String]): Unit = {
     print(Console.RED)
 
-    val io: IO[Unit] = PointFreeProgram.createIO(args)
+    val io: IO[Unit] = PointProgram.createIO(args)
 
     def interpret[A](io: IO[A]): A = io.unsafeRun()
 

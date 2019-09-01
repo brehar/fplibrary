@@ -1,28 +1,27 @@
-import fplibrary.IO
+import fplibrary._
 
 import scala.io.StdIn
 
 object PointProgram {
-  def createIO(args: Array[String]): IO[Unit] = IO.create {
-    display(hyphens)
-    display(question)
-
-    val input: String = prompt()
-    val integerAmount: Int = convertStringToInt(input)
-    val positiveAmount: Int = ensureAmountIsPositive(integerAmount)
-    val balance: Int = round(positiveAmount)
-    val message: String = createMessage(balance)
-
-    display(message)
-    display(hyphens)
-  }
+  def createIO(args: Array[String]): IO[Unit] =
+    for {
+      _ <- display(hyphens)
+      _ <- display(question)
+      input <- prompt
+      integerAmount = convertStringToInt(input)
+      positiveAmount = ensureAmountIsPositive(integerAmount)
+      balance = round(positiveAmount)
+      message = createMessage(balance)
+      _ <- display(message)
+      _ <- display(hyphens)
+    } yield ()
 
   private val hyphens: String = "─" * 50
   private val question: String = "How much money would you like to deposit?"
 
-  private def display(input: Any): Unit = println(input)
+  private def display(input: Any): IO[Unit] = IO.create(println(input))
 
-  private def prompt(): String = StdIn.readLine()
+  private def prompt: IO[String] = IO.create(StdIn.readLine())
 
   private def convertStringToInt(input: String): Int = input.toInt
 

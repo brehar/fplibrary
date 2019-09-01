@@ -1,9 +1,7 @@
 package fplibrary
 
-trait Monad[C[_]] {
-  def flatMap[A, B](a: C[A])(f: A => C[B]): C[B]
+trait Monad[C[_]] extends FlatMap[C] with Applicative[C] {
+  def flatten[A](a: C[C[A]]): C[A]
 }
 
-object Monad {
-  def apply[C[_]: Monad]: Monad[C] = implicitly[Monad[C]]
-}
+object Monad extends Summoner[Monad]
