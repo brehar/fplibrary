@@ -12,7 +12,9 @@ ThisBuild / scalacOptions ++= Seq(
   "-feature",
   "-language:postfixOps",
   "-language:implicitConversions",
-  "-language:higherKinds"
+  "-language:higherKinds",
+  "-language:reflectiveCalls",
+  "-Ypartial-unification"
 )
 
 ThisBuild / triggeredMessage := Watched.clearWhenTriggered
@@ -32,8 +34,11 @@ def cyan(projectName: String): String = scala.Console.CYAN + projectName + scala
 
 ThisBuild / libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % Test
 
-lazy val fplibrary =
-  project.in(file("./fplibrary")).settings(shellPrompt := (_ => fancyPrompt(name.value)))
+lazy val fplibrary = project
+  .in(file("./fplibrary"))
+  .settings(
+    shellPrompt := (_ => fancyPrompt(name.value)),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"))
 
 lazy val application = project
   .in(file("./application"))
